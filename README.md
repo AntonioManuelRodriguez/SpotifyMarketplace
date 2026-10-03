@@ -12,7 +12,7 @@ Trae cuatro looks:
 | **BMW** | Azul y blanco | M · 3.0 TWIN POWER TURBO |
 
 <!-- FOTO: captura general de Spotify con el tema Supra Neón -->
-![Supra Neón]()
+![Supra Neón](https://github.com/AntonioManuelRodriguez/SpotifyMarketplace/blob/main/docs/Captura%20de%20pantalla%202026-10-03%20051217.png)
 
 ---
 
