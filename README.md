@@ -251,6 +251,6 @@ Garage/
 
 ## Créditos
 
-Hecho por **Kyle** con ayuda de Claude. Funciona gracias a [Spicetify](https://github.com/spicetify/cli).
+Hecho por **Antonio Manuel Rodriguez Palenzuela** . Funciona gracias a [Spicetify](https://github.com/spicetify/cli).
 
 Inspirado en el Toyota Supra, el Mercedes-AMG y el BMW M. Los nombres y marcas pertenecen a sus respectivos propietarios y aquí se usan solo como inspiración estética.
