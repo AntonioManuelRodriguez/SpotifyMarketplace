@@ -1,0 +1,498 @@
+/* =====================================================================
+   GARAGE — tema de Spotify para Spicetify
+   Supra Neón (morado) · Supra Rojo · Mercedes (gris/blanco) · BMW (azul/blanco)
+
+   Todos los colores salen de variables --g-* que cambia la extensión
+   garage-menu.js (menú "Garage"). Si no instalas la extensión, el tema
+   se ve en morado neón por defecto.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;1,600;1,700&family=Rajdhani:wght@500;600;700&display=swap');
+
+:root {
+  /* ---- Paleta (por defecto: Supra Neón) ---- */
+  --g-accent: #b026ff;
+  --g-hot: #d77bff;
+  --g-dark: #3b0a63;
+  --g-secondary: #ff4df0;
+  --g-silver: #cfc8e6;
+  --g-bg: #0a0712;
+  --g-bg2: #150e24;
+  --g-sidebar: #06040b;
+  --g-text: #f4f0ff;
+  --g-on-accent: #ffffff;
+
+  /* Versiones "r, g, b" para poder usar rgba(var(--g-x-rgb), .3) */
+  --g-accent-rgb: 176, 38, 255;
+  --g-hot-rgb: 215, 123, 255;
+  --g-bg-rgb: 10, 7, 18;
+  --g-secondary-rgb: 255, 77, 240;
+
+  /* ---- Ajustes finos (los toca el menú) ---- */
+  --g-glow-k: 1;
+  --g-radius: 6px;
+  --g-skew: -12deg;
+  --g-glow:
+    0 0 calc(12px * var(--g-glow-k)) rgba(var(--g-hot-rgb), calc(0.55 * var(--g-glow-k))),
+    0 0 calc(32px * var(--g-glow-k)) rgba(var(--g-accent-rgb), calc(0.35 * var(--g-glow-k)));
+
+  /* ---- Tipografía ---- */
+  --g-font-display: 'Chakra Petch', 'Rajdhani', 'Segoe UI', sans-serif;
+  --g-font-body: 'Rajdhani', 'Segoe UI', sans-serif;
+  --g-head-style: italic;
+  --g-head-transform: uppercase;
+
+  /* ---- Textos de adorno ---- */
+  --g-ghost: "スープラ  SUPRA";
+  --g-badge: "2JZ-GTE  ·  3.0 TWIN TURBO";
+
+  /* ---- Capas de fondo (cada una se puede apagar con "none") ---- */
+  --g-l-sparkles:
+    radial-gradient(circle at 9% 14%, rgba(var(--g-hot-rgb), 0.85) 0 1.2px, transparent 2.8px),
+    radial-gradient(circle at 27% 71%, rgba(var(--g-hot-rgb), 0.6) 0 1px, transparent 2.4px),
+    radial-gradient(circle at 46% 9%, rgba(var(--g-secondary-rgb), 0.7) 0 1.2px, transparent 2.8px),
+    radial-gradient(circle at 63% 38%, rgba(var(--g-hot-rgb), 0.5) 0 1px, transparent 2.4px),
+    radial-gradient(circle at 78% 82%, rgba(var(--g-secondary-rgb), 0.8) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 91% 24%, rgba(var(--g-hot-rgb), 0.65) 0 1.2px, transparent 2.8px),
+    radial-gradient(circle at 55% 93%, rgba(var(--g-hot-rgb), 0.55) 0 1px, transparent 2.4px);
+  --g-l-carbon1: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 6px);
+  --g-l-carbon2: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 6px);
+  --g-l-gridfade: linear-gradient(180deg, var(--g-bg) 0%, var(--g-bg) 45%, rgba(var(--g-bg-rgb), 0) 100%);
+  --g-l-grid: conic-gradient(from 90deg at 1px 1px, transparent 90deg, rgba(var(--g-hot-rgb), 0.2) 0) 0 0 / 46px 46px;
+  --g-l-glow: radial-gradient(ellipse at 50% 125%, rgba(var(--g-accent-rgb), 0.3), transparent 62%);
+  --g-l-stripes: repeating-linear-gradient(115deg, rgba(var(--g-hot-rgb), 0.1) 0 7px, transparent 7px 16px);
+  --g-l-stripefade: linear-gradient(180deg, var(--g-sidebar) 0%, var(--g-sidebar) 55%, rgba(var(--g-bg-rgb), 0) 100%);
+}
+
+/* ---------- Interruptores de adornos (los pone el menú) ---------- */
+html.g-no-grid     { --g-l-grid: none; --g-l-gridfade: none; }
+html.g-no-carbon   { --g-l-carbon1: none; --g-l-carbon2: none; }
+html.g-no-sparkles { --g-l-sparkles: none; }
+html.g-no-stripes  { --g-l-stripes: none; --g-l-stripefade: none; }
+html.g-no-font {
+  --g-font-display: var(--encore-body-font-stack, system-ui, 'Segoe UI', sans-serif);
+  --g-font-body: var(--encore-body-font-stack, system-ui, 'Segoe UI', sans-serif);
+  --g-head-style: normal;
+  --g-head-transform: none;
+}
+html.g-no-taillight .Root__now-playing-bar::before { display: none; }
+html.g-no-badge .Root__now-playing-bar::after { display: none; }
+html.g-no-ghost body::before { display: none; }
+html.g-no-checker body::after { display: none; }
+html.g-no-ticks .playback-progressbar::before { display: none; }
+html.g-no-hud .main-card-card::before,
+html.g-no-hud .main-card-card::after { display: none; }
+html.g-no-anim .Root__now-playing-bar::before { animation: none; }
+html.g-no-anim .main-card-card,
+html.g-no-anim .main-navBar-navBarLink,
+html.g-no-anim .main-yourLibraryX-listItem,
+html.g-no-anim .main-trackList-trackListRow { transition: none !important; }
+
+/* ---------- Base ---------- */
+body,
+.Root__top-container {
+  font-family: var(--g-font-body) !important;
+  background: var(--g-bg) !important;
+}
+
+::selection {
+  background: var(--g-accent);
+  color: var(--g-on-accent);
+}
+
+/* Fondo principal: destellos + carbono + rejilla neón + resplandor */
+.Root__main-view {
+  background:
+    var(--g-l-sparkles),
+    var(--g-l-carbon1),
+    var(--g-l-carbon2),
+    var(--g-l-gridfade),
+    var(--g-l-grid),
+    var(--g-l-glow),
+    var(--g-bg) !important;
+}
+
+/* Menú lateral: brillo arriba + rayas de carreras abajo */
+.Root__nav-bar,
+.main-navBar-navBar {
+  background:
+    linear-gradient(180deg, rgba(var(--g-accent-rgb), 0.16), transparent 28%),
+    var(--g-l-stripefade),
+    var(--g-l-stripes),
+    var(--g-sidebar) !important;
+  border-right: 1px solid rgba(var(--g-hot-rgb), 0.35);
+}
+
+/* ---------- Títulos ---------- */
+h1,
+h2,
+h3,
+.main-shelf-title,
+.main-entityHeader-title,
+.main-entityHeader-titleWrapper {
+  font-family: var(--g-font-display) !important;
+  font-style: var(--g-head-style);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: var(--g-head-transform);
+}
+
+h1 {
+  text-shadow:
+    3px 3px 0 rgba(var(--g-accent-rgb), 0.55),
+    0 0 calc(18px * var(--g-glow-k)) rgba(var(--g-hot-rgb), calc(0.45 * var(--g-glow-k)));
+}
+
+/* ---------- Barra superior ---------- */
+.main-topBar-background {
+  background: linear-gradient(180deg, rgba(var(--g-accent-rgb), 0.4), rgba(var(--g-bg-rgb), 0.92)) !important;
+}
+
+.main-topBar-container {
+  border-bottom: 1px solid rgba(var(--g-hot-rgb), 0.25);
+}
+
+[data-testid="search-input"],
+.main-topBar-container input {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--g-radius) !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+[data-testid="search-input"]:focus,
+.main-topBar-container input:focus {
+  border-color: var(--g-hot) !important;
+  box-shadow: var(--g-glow);
+}
+
+/* ---------- Menú lateral ---------- */
+.main-navBar-navBarLink,
+.main-yourLibraryX-listItem,
+.main-yourLibraryX-navLink {
+  position: relative;
+  border-radius: var(--g-radius) !important;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.main-navBar-navBarLink:hover,
+.main-yourLibraryX-listItem:hover {
+  background: linear-gradient(90deg, rgba(var(--g-accent-rgb), 0.32), transparent) !important;
+  box-shadow: inset 4px 0 0 var(--g-hot);
+  transform: translateX(4px);
+}
+
+.main-navBar-navBarLinkActive,
+.main-navBar-navBarLink[aria-current="page"] {
+  background: linear-gradient(90deg, rgba(var(--g-accent-rgb), 0.5), transparent) !important;
+  box-shadow: inset 4px 0 0 var(--g-hot);
+  color: #fff !important;
+}
+
+/* ---------- Tarjetas + esquinas HUD ---------- */
+.main-card-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--g-bg2), var(--g-bg)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--g-radius) !important;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.main-card-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--g-hot);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), var(--g-glow);
+}
+
+/* Corchetes de mira en las esquinas (arriba-izquierda / abajo-derecha) */
+.main-card-card::before,
+.main-card-card::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+}
+
+.main-card-card::before {
+  top: 6px;
+  left: 6px;
+  background:
+    linear-gradient(var(--g-hot), var(--g-hot)) top left / 20px 2px no-repeat,
+    linear-gradient(var(--g-hot), var(--g-hot)) top left / 2px 20px no-repeat;
+}
+
+.main-card-card::after {
+  right: 6px;
+  bottom: 6px;
+  background:
+    linear-gradient(var(--g-hot), var(--g-hot)) bottom right / 20px 2px no-repeat,
+    linear-gradient(var(--g-hot), var(--g-hot)) bottom right / 2px 20px no-repeat;
+}
+
+.main-card-card:hover::before,
+.main-card-card:hover::after {
+  opacity: 1;
+}
+
+.main-card-imageContainer img,
+.main-card-image {
+  border-radius: var(--g-radius) !important;
+}
+
+/* =====================================================================
+   BOTONES DE PLAY — SIN CUADRADOS
+   Antes se pintaba el <button> de fuera (cuadrado) y por dentro Spotify
+   ya dibuja su círculo. Ahora el botón exterior es transparente y
+   redondo, y el color va solo en el círculo interior.
+   ===================================================================== */
+button[data-testid="play-button"],
+button[data-testid="control-button-playpause"],
+.main-playButton-PlayButton {
+  background: transparent !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  outline-offset: 2px;
+  transition: transform 0.15s ease;
+}
+
+button[data-testid="play-button"] > span,
+button[data-testid="control-button-playpause"] > span,
+.main-playButton-PlayButton > span {
+  background: radial-gradient(circle at 35% 30%, var(--g-hot), var(--g-accent) 62%, var(--g-dark)) !important;
+  color: var(--g-on-accent) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), var(--g-glow);
+}
+
+/* Por si tu versión de Spotify no tiene el <span> interior */
+button[data-testid="play-button"]:not(:has(> span)),
+button[data-testid="control-button-playpause"]:not(:has(> span)),
+.main-playButton-PlayButton:not(:has(> span)) {
+  background: radial-gradient(circle at 35% 30%, var(--g-hot), var(--g-accent) 62%, var(--g-dark)) !important;
+  color: var(--g-on-accent) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), var(--g-glow) !important;
+}
+
+button[data-testid="play-button"]:hover,
+button[data-testid="control-button-playpause"]:hover {
+  transform: scale(1.1);
+}
+
+button[data-testid="play-button"]:active,
+button[data-testid="control-button-playpause"]:active {
+  transform: scale(0.94);
+}
+
+/* ---------- Lista de canciones ---------- */
+.main-trackList-trackListRow {
+  border-radius: var(--g-radius) !important;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.main-trackList-trackListRow:hover {
+  background: linear-gradient(90deg, rgba(var(--g-accent-rgb), 0.24), rgba(255, 255, 255, 0.04)) !important;
+  box-shadow: inset 3px 0 0 var(--g-hot);
+}
+
+.main-trackList-selected,
+.main-trackList-trackListRow.main-trackList-selected {
+  background: linear-gradient(90deg, rgba(var(--g-accent-rgb), 0.38), rgba(255, 255, 255, 0.05)) !important;
+  box-shadow: inset 3px 0 0 var(--g-secondary);
+}
+
+.main-trackList-playing .main-trackList-rowTitle,
+.main-trackList-active .main-trackList-rowTitle,
+.main-trackList-rowTitle.main-trackList-active {
+  color: var(--g-hot) !important;
+  text-shadow: 0 0 calc(10px * var(--g-glow-k)) rgba(var(--g-hot-rgb), 0.55);
+}
+
+/* ---------- Reproductor: luz trasera ---------- */
+.Root__now-playing-bar {
+  position: relative;
+  background:
+    linear-gradient(0deg, rgba(var(--g-accent-rgb), 0.14), transparent 60%),
+    var(--g-sidebar) !important;
+  border-top: none !important;
+}
+
+/* Franja de luz a todo lo ancho, partida en dos como las ópticas del A80 */
+.Root__now-playing-bar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 4px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--g-hot) 0 46%,
+    rgba(var(--g-bg-rgb), 1) 46% 50%,
+    var(--g-hot) 50% 96%,
+    rgba(var(--g-bg-rgb), 1) 96% 100%
+  );
+  background-size: 50% 100%;
+  box-shadow:
+    0 0 calc(10px * var(--g-glow-k)) rgba(var(--g-hot-rgb), 0.8),
+    0 -4px calc(22px * var(--g-glow-k)) rgba(var(--g-accent-rgb), 0.5);
+  animation: g-taillight 3.2s ease-in-out infinite;
+}
+
+/* Placa del motor */
+.Root__now-playing-bar::after {
+  content: var(--g-badge);
+  position: absolute;
+  right: 18px;
+  top: -11px;
+  padding: 1px 10px;
+  font: italic 700 10px/16px var(--g-font-display);
+  letter-spacing: 0.14em;
+  color: var(--g-on-accent);
+  background: linear-gradient(90deg, var(--g-dark), var(--g-accent));
+  border: 1px solid var(--g-hot);
+  border-radius: 2px;
+  transform: skewX(var(--g-skew));
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ---------- Barra de progreso = cuentarrevoluciones ---------- */
+.playback-progressbar,
+[data-testid="playback-progressbar"] {
+  --fg-color: var(--g-hot);
+  --bg-color: rgba(255, 255, 255, 0.14);
+  position: relative;
+}
+
+/* Marcas del cuentarrevoluciones: cortas cada 5 %, largas cada 20 % */
+.playback-progressbar::before {
+  content: "";
+  position: absolute;
+  left: 42px;
+  right: 42px;
+  top: -4px;
+  height: 7px;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(var(--g-hot-rgb), 0.9) 0 1.5px, transparent 1.5px 20%) bottom / 100% 7px no-repeat,
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 1px, transparent 1px 5%) bottom / 100% 4px no-repeat;
+}
+
+.x-progressBar-progressBarBg,
+.progress-bar__bg {
+  background-color: rgba(255, 255, 255, 0.14) !important;
+  height: 5px !important;
+  border-radius: 1px !important;
+}
+
+.x-progressBar-fillColor,
+.progress-bar__fg {
+  background: linear-gradient(90deg, var(--g-silver) 0%, var(--g-secondary) 55%, var(--g-hot) 100%) !important;
+  box-shadow: 0 0 calc(10px * var(--g-glow-k)) rgba(var(--g-hot-rgb), 0.65);
+  border-radius: 1px !important;
+}
+
+/* Aguja */
+.progress-bar__slider,
+.x-progressBar-sliderArea button {
+  background-color: #fff !important;
+  width: 4px !important;
+  height: 16px !important;
+  border-radius: 1px !important;
+  box-shadow: 0 0 calc(10px * var(--g-glow-k)) var(--g-hot);
+  transform: skewX(var(--g-skew));
+}
+
+.volume-bar .x-progressBar-fillColor {
+  background: linear-gradient(90deg, var(--g-silver), var(--g-hot)) !important;
+}
+
+/* Botones activos (shuffle, repeat...) */
+.control-button--active,
+.control-button--active-dot,
+[data-testid="control-button-shuffle"][aria-checked="true"],
+[data-testid="control-button-repeat"][aria-checked="true"] {
+  color: var(--g-hot) !important;
+}
+
+/* ---------- Adornos globales ---------- */
+
+/* Marca de agua gigante */
+body::before {
+  content: var(--g-ghost);
+  position: fixed;
+  right: 24px;
+  bottom: 110px;
+  font: italic 700 64px/1 var(--g-font-display);
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.035);
+  pointer-events: none;
+  z-index: 5;
+  user-select: none;
+}
+
+/* Bandera de cuadros en el borde superior */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: conic-gradient(var(--g-hot) 25%, #000 0 50%, var(--g-hot) 0 75%, #000 0) 0 0 / 6px 6px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 99998;
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--g-sidebar);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--g-hot), var(--g-dark));
+  border-radius: 2px;
+  border: 2px solid var(--g-sidebar);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--g-hot);
+}
+
+/* ---------- Menús contextuales ---------- */
+[role="menu"],
+.main-contextMenu-menu {
+  background: var(--g-bg2) !important;
+  border: 1px solid rgba(var(--g-hot-rgb), 0.5);
+  border-radius: var(--g-radius) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), var(--g-glow);
+}
+
+[role="menuitem"]:hover,
+.main-contextMenu-menuItemButton:hover {
+  background: linear-gradient(90deg, rgba(var(--g-accent-rgb), 0.42), transparent) !important;
+}
+
+/* ---------- Animaciones ---------- */
+@keyframes g-taillight {
+  0%, 100% { filter: brightness(0.85); }
+  50%      { filter: brightness(1.4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .Root__now-playing-bar::before { animation: none; }
+  .main-card-card,
+  .main-navBar-navBarLink,
+  .main-yourLibraryX-listItem { transition: none; }
+}
